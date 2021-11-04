@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn" onclick="test(arr1,arr2)">test</button>
+    <script>
+        // 第一道:计算两个数组的score总和
+        let arr1 =[
+            {name:'fg',score:'18.02'},
+            {name:'rtt',score:'19.78'},
+            {name:'bfg',score:'20.22'},
+            {name:'bg',score:'21.09'},
+            {name:'gg',score:'22.78'},
+            {name:'rrt',score:'23.11'},
+        ]
+        let arr2=[
+            {name:'fjs',score:'18.02'},
+            {name:'ff',score:'19.78'},
+            {name:'ff',score:'20.00'},
+            {name:'vv',score:'21.39'},
+            {name:'trv',score:'22.43'},
+            {name:'bb',score:'23.94'},
+        ]
+        
+        
+       /*  function test() {
+            function num(params) {
+                const res = params.map((item)=>{
+                    return Number(item.score)
+                }) 
+                return res  
+            }
+            let arr = num(arr1).concat(num(arr2))
+            
+            function sum(arr) {
+                return arr.reduce((pre,current)=>{
+                    return pre + current
+                })
+            }
+           alert(sum(arr))
+        } */
+        /* 
+            toFixed(2) JS中有浮点数丢失的问题，所以一般用字符串展示再转为数字，再保留两位小数 
+         */
+        function test(arr1,arr2) {
+            return (arr1.reduce((pre,curr)=>{
+                return pre+Number(curr.score)
+            },0)+arr2.reduce((pre,curr)=>{
+                return pre+Number(curr.score)
+            },0)).toFixed(2)
+        }
+        alert(test(arr1,arr2))
+        
+
+        var obj = { a: 123, b: 234, c: 345 }
+        var array = []
+        var resultObj = {}
+        for (var i = 0; i < obj.length; i++) {
+            resultObj.name = obj[i]
+            array.push(resultObj)
+        }
+        console.log(resultObj.name) 
+    </script>
+</body>
+</html>
