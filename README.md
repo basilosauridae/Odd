@@ -14,3 +14,7 @@
 - Setting.vue --- 父组件
    CanvasDisplay.vue --- 子组件 可拖拽 画点连线
 
+### 5.loading框
+
+- 优化全局按钮 
+
