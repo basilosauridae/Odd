@@ -18,5 +18,9 @@
 
 ### 点击折叠展开收起 `Unfold.vue`
 
+### file-upload关于上传
+
+el-upload基于文件流、base64和断点续传三个方式
+
 
 
