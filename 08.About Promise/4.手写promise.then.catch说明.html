@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 每new一个Promise，都存在一个实例
+        class Promise{
+            constructor(executor){
+                // 状态一定是实例的属性，每个实例独有的，不能放在Promise原型链上
+                this.state = 'pending'
+                this.value = undefined //记录成功的值 给.then使用
+                this.reason = undefined //记录失败的值 给.catch使用
+
+                let resolve = (value) => {
+                    if(this.state === 'pending'){
+                        this.state = 'fullfilled'
+                        this.value = value
+                    }
+                    console.log( '状态改为成功，记录成功的信息' );
+                }
+                let reject = (reason) => {
+                    if(this.state === 'pending'){
+                        this.state = 'rejected'
+                        this.reason = reason
+                    }
+                    console.log( '状态改为失败，记录失败的信息' );
+                }
+                // 若执行executor报错，直接reject
+                // executor(resolve,reject)
+                try{
+                    executor(resolve,reject)
+                }catch(err){
+                    reject()
+                }
+            }
+            // 将.then放在原型上而不是实例上 更加节省性能
+            then(onFullFilled,onRejected){
+                // onFullFilled成功调用
+                if(this.state === 'fullfilled'){
+                    onFullFilled(this.value)
+                }
+                // onRejected失败调用
+                if(this.state === 'rejected'){
+                    onRejected(this.reason)
+                }
+            }
+        }
+
+        const p = new Promise((resolve,reject)=>{
+            reject(500)
+        })
+        // promise A+规范：p.then(onFullFilled,onRejected).catch(处理函数)
+        p.then(res=>{
+            console.log( res,'res' )
+        },err=>{
+            console.log( err,'err' )
+        })
+    </script>
+</body>
+</html>
+</body>
+</html>

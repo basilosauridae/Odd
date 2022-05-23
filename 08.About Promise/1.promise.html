@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // promise书写异步代码的方式，用于解决回调嵌套问题
+        // 基本语法
+        // 1.创建一个promise
+        const p = new Promise((resolve,reject)=>{
+            // resolve成功需要调用的函数，将promise状态从pending改为fullfilled
+            // reject失败需要调用的函数，将promise状态从fullfilled改为rejected
+
+            // promise内部一般会封装一个异步操作ajax文件读写，异步操作有成功或失败
+            setTimeout(()=>{
+                resolve(200)
+            },2000)
+        })
+        // 2.使用promise对象
+        p.then(res=>{
+            console.log( res );
+        }).catch(err=>{
+            console.log( err );
+        })
+
+        // 
+    </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 每new一个Promise，都存在一个实例
+        class Promise{
+            constructor(executor){
+                // 状态一定是实例的属性，每个实例独有的，不能放在Promise原型链上
+                this.state = 'pending'
+                this.value = undefined //记录成功的值 给.then使用
+                this.reason = undefined //记录失败的值 给.catch使用
+
+                this.onResolveCallbacks = [] //存放成功时需要执行的函数
+                this.onRejectedCallbacks = []
+
+                let resolve = (value) => {
+                    if(this.state === 'pending'){
+                        this.state = 'fullfilled'
+                        this.value = value
+                        this.onResolveCallbacks.forEach(fn=>fn()) //3.将存入数组的函数依次执行
+                    }
+                }
+                let reject = (reason) => {
+                    if(this.state === 'pending'){
+                        this.state = 'rejected'
+                        this.reason = reason
+                        this.onRejectedCallbacks.forEach(fn=>fn())
+                    }
+                }
+                // 若执行executor报错，直接reject
+                // executor(resolve,reject)
+                try{
+                    executor(resolve,reject)
+                }catch(err){
+                    reject()
+                }
+            }
+            // 将.then放在原型上而不是实例上 更加节省性能
+            then(onFullFilled,onRejected){
+                if(this.state === 'fullfilled'){
+                    onFullFilled(this.value)
+                }
+                if(this.state === 'rejected'){
+                    onRejected(this.reason)
+                }
+                if(this.state === 'pending'){
+                    // 2.将成功的时候要干的事情先存起来,解决then在后执行
+                    // then的时候是pending
+                    // this.onResolveCallbacks.push(onFullFilled)//优化写法 可以传参
+                    this.onResolveCallbacks.push(()=>{
+                        onFullFilled(this.value)
+                    })
+                    // 失败的事情存起来
+                    this.onRejectedCallbacks.push(()=>{
+                        onRejected(this.reason)
+                    })
+                    console.log( this.onResolveCallbacks );
+                }
+            }
+        }
+
+        const p = new Promise((resolve,reject)=>{
+            setTimeout(() => {
+                resolve(200)
+            }, 1000)
+        })
+        //1.then应该是promise状态更新为fullfilled之后才执行
+        // 若有异步 可能不是立刻满足条件 要等满足条件 再来调用这个函数
+        p.then(res=>{
+            console.log( res,'1' )
+        })
+
+        p.then(res=>{
+            console.log( res,'2' )
+        })
+
+        p.then(res=>{
+            console.log( res,'3' )
+        })
+    </script>
+</body>
+</html>
+</body>
+</html>

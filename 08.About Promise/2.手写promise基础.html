@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 使用类的方式手写
+        class Promise{
+            // executor是Promise A+规范
+            constructor(executor){
+                // executor(1,2)//此函数调用 new Promise后的函数就会执行
+                let resolve = () => {
+                    console.log( '状态改为成功，记录成功的信息' );
+                }
+                let reject = () => {
+                    console.log( '状态改为失败，记录失败的信息' );
+                }
+                executor(resolve,reject)
+
+            }
+        }
+
+        const p = new Promise((resolve,reject)=>{
+            // resolve和reject是Promise内部实现好的函数
+            console.log('立刻执行');
+            console.log( resolve,reject )//executor传入的参数 
+        })
+    </script>
+</body>
+</html>

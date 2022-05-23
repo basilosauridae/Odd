@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 每new一个Promise，都存在一个实例
+        class Promise{
+            constructor(executor){
+                // 状态一定是实例的属性，每个实例独有的，不能放在Promise原型链上
+                this.state = 'pending'
+                this.value = undefined //记录成功的值 给.then使用
+                this.reason = undefined //记录失败的值 给.catch使用
+
+                let resolve = (value) => {
+                    // this.state = 'fullfilled'
+                    // this.value = value
+                    if(this.state === 'pending'){
+                        this.state = 'fullfilled'
+                        this.value = value
+                    }
+                    console.log( '状态改为成功，记录成功的信息' );
+                }
+                let reject = (reason) => {
+                    if(this.state === 'pending'){
+                        this.state = 'rejected'
+                        this.reason = reason
+                    }
+                    console.log( '状态改为失败，记录失败的信息' );
+                }
+                executor(resolve,reject)
+
+            }
+        }
+
+        const p = new Promise((resolve,reject)=>{
+            resolve(200)
+            reject('错了')
+            resolve(300)//但如果重复调用 状态无法凝固，需要在state赋值时if判断 只执行第一个
+        })
+        console.log( p );
+    </script>
+</body>
+</html>
