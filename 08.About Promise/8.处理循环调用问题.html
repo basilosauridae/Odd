@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 标准版的promise有个现象 .then中返回的promise对象 不能是自己
+        const p = new Promise((resolve,reject)=>{
+            resolve(300)
+        })
+        const p2 = p.then(res=>{
+            return p2
+        })
+        // error:Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
+    </script>
+</body>
+</html>

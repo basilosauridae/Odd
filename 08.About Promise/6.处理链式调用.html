@@ -25,22 +25,23 @@
                 this.value = undefined //记录成功的值 给.then使用
                 this.reason = undefined //记录失败的值 给.catch使用
 
+                this.onResolveCallbacks = [] //存放成功时需要执行的函数
+                this.onRejectedCallbacks = []
+
                 let resolve = (value) => {
                     if(this.state === 'pending'){
                         this.state = 'fullfilled'
                         this.value = value
+                        this.onResolveCallbacks.forEach(fn=>fn()) 
                     }
-                    console.log( '状态改为成功，记录成功的信息' );
                 }
                 let reject = (reason) => {
                     if(this.state === 'pending'){
                         this.state = 'rejected'
                         this.reason = reason
+                        this.onRejectedCallbacks.forEach(fn=>fn())
                     }
-                    console.log( '状态改为失败，记录失败的信息' );
                 }
-                // 若执行executor报错，直接reject
-                // executor(resolve,reject)
                 try{
                     executor(resolve,reject)
                 }catch(err){
@@ -49,25 +50,42 @@
             }
             // 将.then放在原型上而不是实例上 更加节省性能
             then(onFullFilled,onRejected){
-                // 加上判断 防止重复调用
-                if(this.state === 'fullfilled'){
-                    onFullFilled(this.value) //onFullFilled成功调用
-                }
-                if(this.state === 'rejected'){
-                    onRejected(this.reason) //onRejected失败调用
-                }
+                // 核心要点1的实现：
+                let promise2 = new Promise((resolve,reject)=>{
+                    // console.log( this.state,'init' );
+                    if(this.state === 'fullfilled'){
+                        // onFullFilled(this.value)
+                        // 核心要点2的实现：
+                        let x = onFullFilled(this.value)
+                        resolve(x)
+                    }
+                    if(this.state === 'rejected'){
+                        onRejected(this.reason)
+                    }
+                    // 异步处理
+                    if(this.state === 'pending'){
+                        this.onResolveCallbacks.push(()=>{
+                            onFullFilled(this.value)
+                        })
+                        this.onRejectedCallbacks.push(()=>{
+                            onRejected(this.reason)
+                        })
+                    }
+                })
+                return promise2
             }
         }
 
         const p = new Promise((resolve,reject)=>{
-            reject(500)
+           resolve(200)
         })
-        // promise A+规范：p.then(onFullFilled,onRejected).catch(处理函数)
-        // 若不写p.then 类中的then(){...}不会调用
+        // 核心要点1：上一个.then要返回一个promise对象
+        // 核心要点2：下一个.then要拿到上一个.then的回调返回值
         p.then(res=>{
-            console.log( res,'res' )
-        },err=>{
-            console.log( err,'err' )
+            console.log( res,'1' )
+            return 500
+        }).then(res=>{
+            console.log( res,'2' );
         })
     </script>
 </body>

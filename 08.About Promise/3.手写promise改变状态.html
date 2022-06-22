@@ -22,15 +22,15 @@
                     if(this.state === 'pending'){
                         this.state = 'fullfilled'
                         this.value = value
+                        console.log( '状态改为成功，记录成功的信息' )
                     }
-                    console.log( '状态改为成功，记录成功的信息' );
                 }
                 let reject = (reason) => {
                     if(this.state === 'pending'){
                         this.state = 'rejected'
                         this.reason = reason
+                        console.log( '状态改为失败，记录失败的信息' )
                     }
-                    console.log( '状态改为失败，记录失败的信息' );
                 }
                 executor(resolve,reject)
 
