@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+.bg{
+  width: 343px;
+  height: 464px;
+  min-height: 66px;
+  background: transparent;
+  border: 0.5px solid #22936E;
+  border-radius: 15px;
+  background: url(./images/bg／药物治疗／装饰／底部.png) no-repeat 0 100%;
+} 
+.cover{
+    position: relative;
+}
+.cover::before {
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    right: -4px;
+    bottom: -1px;
+    border: 30px solid #fff;
+    border-left: 71px solid;
+    border-top-color: transparent;
+    border-left-color: transparent;
+}
+.cover::after{
+    content: "";
+    display: inline-block;
+    width:343px;
+    height: 66px;
+    -webkit-clip-path: polygon(98% 23%, 76% 90%, 98% 90%);
+    clip-path: polygon(98% 23%, 76% 90%, 98% 90%);
+    background-color:  #5ec1a0;
+    border-radius: 5px; 
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+</style>
+<body>
+    <div class="bg cover">
+    </div>
+</body>
+</html>
